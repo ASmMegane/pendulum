@@ -16,7 +16,7 @@ struct Config {
 	float speed;
 	float speed0;
 	float deltaTime;
-	float g;
+	float gravity;
 	float accelerationError; // погрешность
 	float isBoost;
 	float isClockwiseMotion;

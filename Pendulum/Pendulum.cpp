@@ -2,18 +2,17 @@
 #include "config.h"
 
 
-sf::ConvexShape createGear(const int & radius, const int & pointCount, const int & deltaRad) {
+sf::ConvexShape createGear(int radius, int pointCount, int deltaRad) {
 	sf::ConvexShape gear;
 	int delataFi = 360 / pointCount;
 	gear.setPointCount(pointCount + 1);
 	gear.setPoint(0, sf::Vector2f(0, 0));
-	int i = 0;
-	for (i; i <= pointCount; i++) {
+	for (int i = 0; i <= pointCount; i++) {
 		if (i % 2 == 1) {
-			gear.setPoint(i, sf::Vector2f((radius * cos(delataFi * i * M_PI / 180)), (radius * sin(delataFi * i * M_PI / 180))));
+			gear.setPoint(i, sf::Vector2f((float)(radius * cos(delataFi * i * M_PI / 180)), (float)(radius * sin(delataFi * i * M_PI / 180))));
 		}
 		else {
-			gear.setPoint(i, sf::Vector2f((radius + deltaRad) * cos(delataFi * i * M_PI / 180), ((radius + deltaRad) * sin(delataFi * i * M_PI / 180))));
+			gear.setPoint(i, sf::Vector2f((float)((radius + deltaRad) * cos(delataFi * i * M_PI / 180)), (float)((radius + deltaRad) * sin(delataFi * i * M_PI / 180))));
 		}
 	}
 	return gear;
@@ -55,7 +54,7 @@ sf::CircleShape pendulPast3(Config & conf) {
 }
 
 void dataInit(Config & conf) {
-	conf.accelerationError = 0.000000000005;
+	conf.accelerationError = 0.000000000005f;
 	conf.settings.antialiasingLevel = 12;
 	conf.isMoveGears = false;
 	conf.lastRotate = 320;
@@ -63,7 +62,7 @@ void dataInit(Config & conf) {
 	conf.startPosY = 200;
 	conf.speed = 0;
 	conf.speed0 = 0;
-	conf.g = 9.4;
+	conf.gravity = 9.4f;
 	conf.isBoost = 1;
 	conf.isClockwiseMotion = -1;
 	conf.window.create(sf::VideoMode(800, 600), "Pendulum", sf::Style::Default, conf.settings);
@@ -83,17 +82,17 @@ void movePendulumAndGear(Config & conf) {
 	conf.isMoveGears = true;
 	if ((conf.pendulPast1.getRotation() < 350) && (conf.pendulPast1.getRotation() > 330))
 		conf.isMoveGears = false;
-	conf.speed = conf.speed0 + conf.g * conf.isBoost *  conf.deltaTime;
+	conf.speed = conf.speed0 + conf.gravity * conf.isBoost *  conf.deltaTime;
 	conf.speed0 = conf.speed;
-	conf.deltaFi = 2 * M_PI * conf.speed * conf.deltaTime * conf.isClockwiseMotion * conf.accelerationError;
+	conf.deltaFi = (float)(2 * M_PI * conf.speed * conf.deltaTime * conf.isClockwiseMotion * conf.accelerationError);
 	conf.pendulPast1.rotate(conf.deltaFi);
 	conf.pendulPast2.rotate(conf.deltaFi);
 	conf.pendulPast3.rotate(conf.deltaFi);
 	if (abs(conf.lastRotate - conf.pendulPast1.getRotation()) > 300)
 		conf.isBoost = -1;
 	if (conf.isMoveGears) {
-		conf.gear1.rotate(-0.2);
-		conf.gear2.rotate(0.2);
+		conf.gear1.rotate(-0.2f);
+		conf.gear2.rotate(0.2f);
 	}
 	conf.lastRotate = conf.pendulPast1.getRotation();
 }
